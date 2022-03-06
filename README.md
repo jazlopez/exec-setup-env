@@ -9,9 +9,24 @@ Options:
   --help  Show this message and exit.
 
 Commands:
+  login-registry
   setup-network
  ```
-  
+
+#### Login docker registry
+
+```
+Usage: main.py login-registry [OPTIONS]
+
+Options:
+  --username TEXT  Docker registry username  [required]
+  --password TEXT  Docker registry password
+  --opts TEXT      Specific registry values.
+                     --opts "registry-id=1111111,registry-url=https://private.docker.registry.url"
+  --help           Show this message and exit.
+```
+
+
 #### Create docker network (remove if exists)
 
 ```
