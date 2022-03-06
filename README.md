@@ -24,7 +24,3 @@ python main.py setup-network --name foo
 # creating network...
 # created docker network with name foo
 ```
-
-### Contact
-
-Contact me if you want to contribute.
