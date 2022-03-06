@@ -20,9 +20,9 @@ Usage: main.py login-registry [OPTIONS]
 
 Options:
   --username TEXT  Docker registry username  [required]
-  --password TEXT  Docker registry password
+  --password TEXT  Docker registry password (optional)
   --opts TEXT      Specific registry values.
-                     --opts "registry-id=1111111,registry-url=https://private.docker.registry.url"
+                     --opts "registry-id=1111111,server=https://private.docker.registry.url"
   --help           Show this message and exit.
 ```
 
