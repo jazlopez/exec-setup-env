@@ -1,25 +1,25 @@
 import os
 import click
 import time
-import logging
 import subprocess
+import utils
 
 @click.group()
 def cli():
     pass
 
-
 @cli.command()
 @click.option('--profile', required=True, help="Configured AWS profile name to authenticate to ECR")
-@click.option('--registry-id', required=False, default='219919340901', help="ECR AWS registry Id")
-@click.option('--region', required=False, default='us-east-1', help="ECR AWS region name")
+@click.option('--registry-id', required=False, default='219919340901', help="ECR AWS registry Id. By default uses AWS US 219919340901")
+@click.option('--region', required=False, default='us-east-1', help="ECR AWS region name. By default uses region us-east-1")
 def authenticate_aws_ecr(profile, registry_id, region):
 
   try:
 
-    _authenticate_with_profile(profile, registry_id, region)
+    utils.authenticate_with_profile(profile, registry_id, region)
 
-  except Exception  as e:
+  except Exception as e:
+
     click.secho(e, fg='red')
 
 
@@ -31,8 +31,9 @@ def authenticate_aws_ecr(profile, registry_id, region):
 def pull_image(image_name, image_tag, registry_id, region):
 
   try:
-    _pull_image_from_registry(image_name, image_tag, registry_id, region)
-    _tag_local_remote_image(image_name, image_tag, registry_id, region)
+
+    utils.pull_image_from_registry(image_name, image_tag, registry_id, region)
+    utils.tag_local_remote_image(image_name, image_tag, registry_id, region)
   except Exception  as e:
     click.secho(e, fg='red')
 
@@ -61,50 +62,6 @@ def setup_database(name, base_image, network):
   except Exception as e:
 
     click.secho(e, fg='red')
-
-
-def _authenticate_with_profile(profile, registry_id, region):
-
-  try:
-
-    cmd = f"$(aws ecr get-login --registry-ids {registry_id} --no-include-email --region {region} --profile {profile})"
-
-    out = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True).decode('utf-8')
-
-    click.secho(out)
-
-  except subprocess.CalledProcessError as e:
-
-    raise Exception(e.output)
-
-def _pull_image_from_registry(image_name, image_tag, registry_id, region):
-
-  try:
-
-    cmd = f"docker pull {registry_id}.dkr.ecr.{region}.amazonaws.com/{image_name}:{image_tag}"
-
-    out = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True).decode('utf-8')
-
-    click.secho(out)
-
-  except subprocess.CalledProcessError as e:
-
-    raise Exception(e.output)
-
-
-def _tag_local_remote_image(image_name, image_tag, registry_id, region):
-
-  try:
-
-    cmd = f"docker tag {registry_id}.dkr.ecr.{region}.amazonaws.com/{image_name}:{image_tag} {image_name}"
-
-    out = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True).decode('utf-8')
-
-    click.secho(out)
-
-  except subprocess.CalledProcessError as e:
-
-    raise Exception(e.output)
 
 
 def _wait_thread(timeout):
@@ -146,16 +103,6 @@ def _run_local_database_migrations(name, network):
   except subprocess.CalledProcessError as e:
 
     raise Exception(e.output)
-
-
-@cli.command()
-@click.option('--username', required=True, help='Docker registry username')
-@click.option('--password', required=False, help='Docker registry password')
-@click.option('--opts', required=False, help='Extra options.Example: --opts "registry-ids=1111111,registry-url=https://private.docker.registry.url"')
-def login_registry(username=None, password="", opts=""):
-  pass
-
-
 
 def network_delete_if_exists_then_create(network=None):
   
