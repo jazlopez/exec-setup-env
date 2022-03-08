@@ -1,6 +1,19 @@
 # exec-setup-env
 CLI execution setup environment for docker resources: network, container It reduces complexity by wrapping complexity docker syntax.
 
+### Install 
+
+You require to have python3 and PIP to install module dependencies.
+
+```
+python -V
+# Python 3.9.1
+
+# install dependencies
+
+pip install -r requirements.txt
+```
+
 ### Usage
 ```
 Usage: main.py [OPTIONS] COMMAND [ARGS]...
