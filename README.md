@@ -16,29 +16,55 @@ pip install -r requirements.txt
 
 ### Usage
 ```
-Usage: main.py [OPTIONS] COMMAND [ARGS]...
-
 Options:
   --help  Show this message and exit.
 
 Commands:
-  login-registry
+  authenticate-aws-ecr
+  pull-image
+  setup-database
   setup-network
  ```
 
-#### Login docker registry
+#### Authenticate 
 
 ```
-Usage: main.py login-registry [OPTIONS]
+Usage: main.py authenticate-aws-ecr [OPTIONS]
 
 Options:
-  --username TEXT  Docker registry username  [required]
-  --password TEXT  Docker registry password (optional)
-  --opts TEXT      Specific registry values.
-                     --opts "registry-id=1111111,server=https://private.docker.registry.url"
-  --help           Show this message and exit.
+  --profile TEXT      Configured AWS profile name to authenticate to ECR
+                      [required]
+  --registry-id TEXT  ECR AWS registry Id. By default uses AWS US 219919340901
+  --region TEXT       ECR AWS region name. By default uses region us-east-1
+  --help              Show this message and exit.
 ```
 
+Example
+
+```
+python main.py authenticate-aws-ecr --profile awsprodus
+
+```
+
+#### Pull image from registry
+
+```
+Usage: main.py pull-image [OPTIONS]
+
+Options:
+  --image-name TEXT   Docker image name  [required]
+  --image-tag TEXT    Docker image tag  [required]
+  --registry-id TEXT  ECR AWS registry Id
+  --region TEXT       ECR AWS region name
+  --help              Show this message and exit.
+
+```
+
+Example
+
+```
+python main.py pull-image --image-name edt-kong-gateway-ee --image-tag 2.1.3.1
+```
 
 #### Create docker network (remove if exists)
 
